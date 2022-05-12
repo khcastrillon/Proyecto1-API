@@ -12,3 +12,10 @@ class Model:
         X_val = vectorizer.transform(data)
         result = self.model.predict(X_val)
         return result
+
+    def make_predictions_proba(self, data):
+        print(self.model)
+        vectorizer = pickle.load(open('assets/tfidf.pickle', 'rb'))
+        X_val = vectorizer.transform(data)
+        result = self.model.predict_proba(X_val)
+        return result

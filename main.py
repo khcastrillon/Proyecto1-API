@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from DataModel import DataModel
 import PredictionModel
 from fastapi.middleware.cors import CORSMiddleware
+import csv
 
 app = FastAPI()
 
@@ -13,30 +14,35 @@ app.add_middleware(CORSMiddleware, allow_origins = ['*'], allow_credentials = Tr
 def make_predictions1(dataModel: DataModel):
     logicRegresion = "LR_model"
     df = pd.DataFrame(dataModel.dict(), columns=dataModel.dict().keys(), index=[0])
+    df = df["study_and_condition"]
     df.columns = dataModel.columns()
     model = PredictionModel.Model(logicRegresion)
     res = PredictionModel.Model.make_predictions(model, df)
-    result = {f"clasificacion: {res}, Exactitud: 81,2%"}
+    pred = PredictionModel.Model.make_predictions_proba(model, df)
+    result = {f"clasificacion: {res}, Exactitud: {pred[0][0]*100}%"}
     return result
 
 @app.post("/predict2")
 def make_predictions2(dataModel: DataModel):
     nb = "NB_model"
     df = pd.DataFrame(dataModel.dict(), columns=dataModel.dict().keys(), index=[0])
+    df = df["study_and_condition"]
     df.columns = dataModel.columns()
-    model = PredictionModel.Model( nb)
+    model = PredictionModel.Model(nb)
     res = PredictionModel.Model.make_predictions(model, df)
-    result = {f"clasificacion: {res}, Exactitud: 80,18%"}
+    pred = PredictionModel.Model.make_predictions_proba(model, df)
+    result = {f"clasificacion: {res}, Exactitud: {pred[0][0] * 100}%"}
     return result
 
 @app.post("/predict3")
 def make_predictions3(dataModel: DataModel):
     svm = "SVM_model"
     df = pd.DataFrame(dataModel.dict(), columns=dataModel.dict().keys(), index=[0])
+    df = df["study_and_condition"]
     df.columns = dataModel.columns()
     model = PredictionModel.Model(svm)
     res = PredictionModel.Model.make_predictions(model, df)
-    result = {f"clasificacion: {res}, Exactitud: 83,57%"}
+    result = {f"clasificacion: {res}, Exactitud: 81,2%"}
     return result
 
 @app.get("/")
