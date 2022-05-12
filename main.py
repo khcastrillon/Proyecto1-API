@@ -19,6 +19,10 @@ def make_predictions1(dataModel: DataModel):
     model = PredictionModel.Model(logicRegresion)
     res = PredictionModel.Model.make_predictions(model, df)
     pred = PredictionModel.Model.make_predictions_proba(model, df)
+    if (res[0] == 1):
+        res = "Sí"
+    else:
+        res = "No"
     result = {f"clasificacion: {res}, Exactitud: {pred[0][0]*100}%"}
     return result
 
@@ -31,7 +35,11 @@ def make_predictions2(dataModel: DataModel):
     model = PredictionModel.Model(nb)
     res = PredictionModel.Model.make_predictions(model, df)
     pred = PredictionModel.Model.make_predictions_proba(model, df)
-    result = {f"clasificacion: {res}, Exactitud: {pred[0][0] * 100}%"}
+    if (res[0] == 1):
+        res = "Sí"
+    else:
+        res = "No"
+    result = {f"clasificacion: {res}, Exactitud: {pred[0][0]*100}%"}
     return result
 
 @app.post("/predict3")
@@ -42,6 +50,10 @@ def make_predictions3(dataModel: DataModel):
     df.columns = dataModel.columns()
     model = PredictionModel.Model(svm)
     res = PredictionModel.Model.make_predictions(model, df)
+    if (res == [1]):
+        res = "Sí"
+    else:
+        res = "No"
     result = {f"clasificacion: {res}, Exactitud: 81,2%"}
     return result
 
