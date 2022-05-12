@@ -1,13 +1,14 @@
 from joblib import load
-import Procesamiento
-
+from sklearn.feature_extraction.text import TfidfVectorizer
+import pickle
 
 class Model:
-    def __init__(self,columns, modelName):
-        self.model = load(f"assets/{modelName}.joblib")
+    def __init__(self, modelName):
+        self.model = load(f"assets/{modelName}.sav")
 
     def make_predictions(self, data):
         print(self.model)
-        result = self.model.predict(data)
+        vectorizer = pickle.load(open('assets/tfidf.pickle', 'rb'))
+        X_val = vectorizer.transform(data)
+        result = self.model.predict(X_val)
         return result
-
