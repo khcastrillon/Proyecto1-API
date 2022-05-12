@@ -21,9 +21,11 @@ def make_predictions1(dataModel: DataModel):
     pred = PredictionModel.Model.make_predictions_proba(model, df)
     if (res[0] == 1):
         res = "Sí"
+        pred = pred[0][1]*100
     else:
         res = "No"
-    result = {f"clasificacion: {res}, Exactitud: {pred[0][0]*100}%"}
+        pred = pred[0][0]*100
+    result = {f"clasificacion: {res}, Exactitud: {pred}%"}
     return result
 
 @app.post("/predict2")
@@ -37,9 +39,11 @@ def make_predictions2(dataModel: DataModel):
     pred = PredictionModel.Model.make_predictions_proba(model, df)
     if (res[0] == 1):
         res = "Sí"
+        pred = pred[0][1] * 100
     else:
         res = "No"
-    result = {f"clasificacion: {res}, Exactitud: {pred[0][0]*100}%"}
+        pred = pred[0][0] * 100
+    result = {f"clasificacion: {res}, Exactitud: {pred}%"}
     return result
 
 @app.post("/predict3")
@@ -50,11 +54,14 @@ def make_predictions3(dataModel: DataModel):
     df.columns = dataModel.columns()
     model = PredictionModel.Model(svm)
     res = PredictionModel.Model.make_predictions(model, df)
+    prob = 0
     if (res == [1]):
         res = "Sí"
+        prob = "81,2%"
     else:
         res = "No"
-    result = {f"clasificacion: {res}, Exactitud: 81,2%"}
+        prob =  "80,06%"
+    result = {f"clasificacion: {res}, Exactitud: {prob}"}
     return result
 
 @app.get("/")
